@@ -1,9 +1,5 @@
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.Statement;
+import java.sql.*;
 import java.awt.event.ActionEvent;
-import java.sql.Connection;
 
 public class Calendar {
 
@@ -140,6 +136,9 @@ public class Calendar {
         // FROM calendar
         // WHERE userid = this.userID && dateid = this.dateID
         // ;
+        return 0;
+    }    
+        
     public int getFWCID(String dateID) {
         // try block to run sql statement
         try {
@@ -163,7 +162,7 @@ public class Calendar {
         // get the names of the database
         String url = "jdbc:mysql://localhost:3306/sticktotheplan";
         String username = "root";
-        String password = "5UOemu5d#";
+        String password = "password";
 
         // try to open connection
         Connection con = null;
