@@ -1,9 +1,5 @@
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.Statement;
+import java.sql.*;
 import java.awt.event.ActionEvent;
-import java.sql.Connection;
 
 public class Calendar {
 
@@ -17,10 +13,12 @@ public class Calendar {
     // Constructor
     public Calendar(int userID) {
         this.userID = userID;
-        Connection con = connect();
-    }
+        Connector c = new Connector();
+        Connection con = c.getConnection();
 
-    /**
+}
+
+/**
      * This method will create a food, weight,
      * and cardio ID for this specific day
      * @param dateID
@@ -64,8 +62,9 @@ public class Calendar {
      * Create the food page
      * @param foodID
      */
-    private void createFoodPage(int foodID) {
-        //FWC foodTable = new Food(foodID);
+    private void createFoodPage(Connection con, int foodID) throws Exception {
+        FWC<FoodEntry> foodTable = new Food(con,foodID);
+        foodTable.addRow(new FoodEntry(1,"corn",260,6,"protein"));
     }
 
     /**
@@ -90,12 +89,18 @@ public class Calendar {
      * @param dateID
      * @return foodID
      */
-    public int getFoodID(int dateID) {
+    public int getFoodID(Connection con, int dateID) {
         // SELECT foodid
         // FROM calendar
         // WHERE userid = this.userID && dateid = this.dateID
-        // ;
-
+        String sql = "SELECT foodID " +
+                "FROM calendar " +
+                "WHERE userID = this.userID && dateID = this.dateID";
+        try (PreparedStatement stmt = con.prepareStatement(sql)) {
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         // return foodID;
         return 0;
     }
@@ -130,26 +135,5 @@ public class Calendar {
         return 0;
     }
 
-    public Connection connect() {
-        // get the names of the database
-        String url = "jdbc:mysql://localhost:3306/sticktotheplan";
-        String username = "root";
-        String password = "password";
-
-        // try to open connection
-        Connection con = null;
-        try {
-            // connection
-            con = DriverManager.getConnection(url, username, password);
-            System.out.println("connected");
-            return con;
-
-        } catch (Exception e) {
-            // error connecting
-            System.out.println("exception: " + e.getMessage());
-            System.exit(1);
-        }
-
-        return con;
-    }
 }
+
