@@ -89,16 +89,22 @@ public class Calendar {
      * Create the weight table
      * @param weightID
      */
-    private void createWeightPage(int weightID) {
+    private void createWeightPage(Connection con, int weightID) {
         // FWC weightTable = new Weight(weightID);
+        FWC<WeightEntry> weightTable = new Weight(con, weightID);
+        weightTable.addRow(new WeightEntry(1,3000000,100000000,50,"Bicep Curls"));
+
     }
 
     /**
      * Create the cardio table
      * @param cardioID
      */
-    private void createCardioPage(int cardioID) {
+    private void createCardioPage(Connection con, int cardioID) {
         // FWC cardioTable = new Cardio(cardioID);
+        FWC<CardioEntry> cardioTable = new Cardio(con, cardioID);
+        cardioTable.addRow(new CardioEntry(1,1,"run",100,"min",11.5,"miles",10));
+
     }
 
     // GETTERS
@@ -107,6 +113,33 @@ public class Calendar {
      * @param dateID
      * @return fwcID
      */
+    public int getFoodID(Connection con, int dateID) {
+        int foodID = 0;
+        String query = "SELECT foodID " +
+                "FROM calendar " +
+                "WHERE userID = this.userID && dateID = this.dateID";
+
+        try (Statement stmt = con.createStatement()) {
+            ResultSet result = stmt.executeQuery(query);
+            result.next();
+            foodID = (result.getInt("foodID"));
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        // return foodID;
+        return foodID;
+    }
+
+    /**
+     * // get the wieght id based on the day
+     * @param dateID
+     * @return weightID
+     */
+    public int getWeightID(int dateID) {
+        // SELECT weightid
+        // FROM calendar
+        // WHERE userid = this.userID && dateid = this.dateID
+        // ;
     public int getFWCID(String dateID) {
         // try block to run sql statement
         try {
