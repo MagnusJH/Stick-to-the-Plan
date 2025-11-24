@@ -21,15 +21,31 @@ public class FoodEntry {
         return foodName;
     }
 
+    public void setFoodName(String f) {
+        foodName = f;
+    }
+
     public int getCals() {
         return cals;
+    }
+
+    public void setCals(int c) {
+        cals = c;
     }
 
     public int getNutrNum() {
         return nutrNum;
     }
 
+    public void setNutrNum(int n) {
+        nutrNum = n;
+    }
+
     public String getNutrName() {
         return nutrName;
+    }
+
+    public void setNutrName(String n) {
+        nutrName = n;
     }
 }
