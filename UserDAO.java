@@ -53,7 +53,8 @@ public class UserDAO {
      *
      * @param username desired username
      * @param password user's password
-     * @return new userID if registration succeeds, -1 if it fails
+     * @return true if registration succeeds, false if
+     *         the username is taken or if an error occurs
      */
     public int registerUser(String username, String password) {
 
@@ -75,23 +76,18 @@ public class UserDAO {
 
             // Execute the INSERT command
             stmt.executeUpdate();
-
-            // Retrieve the auto-generated userID from the database
-            ResultSet keys = stmt.getGeneratedKeys();
-            if (keys.next()) {
-                return keys.getInt(1);
-            }
+            return true;
 
         } catch (SQLIntegrityConstraintViolationException e) {
             // This happens if username is UNIQUE and already taken (extra safety)
-            return -1;
+            return false;
         } catch (SQLException e) {
             // Print full SQL error if connection or query fails
             e.printStackTrace();
         }
 
         // Return -1 if registration failed
-        return -1;
+        return false;
     }
 
     /**
