@@ -3,7 +3,9 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane>
+<AnchorPane xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.example.test.FoodController"
+            prefWidth="650" prefHeight="420">
 
     <children>
 
@@ -12,23 +14,23 @@
               AnchorPane.bottomAnchor="20">
 
             <!-- Title -->
-            <Label text="Editable Food Log"
+            <Label text="Food Log"
                    style="-fx-font-size: 20px; -fx-font-weight: bold;" />
 
             <!-- Table -->
-            <TableView id="tableView" editable="true" prefHeight="320">
+            <TableView fx:id="tableView" editable="true" prefHeight="320">
                 <columns>
-                    <TableColumn id="foodCol" text="Food" prefWidth="180"/>
-                    <TableColumn id="calCol" text="Calories" prefWidth="100"/>
-                    <TableColumn id="nutrientCol" text="Nutrient Type" prefWidth="150"/>
-                    <TableColumn id="numCol" text="Amount" prefWidth="120"/>
+                    <TableColumn fx:id="foodCol" text="Food" prefWidth="180"/>
+                    <TableColumn fx:id="calCol" text="Calories" prefWidth="100"/>
+                    <TableColumn fx:id="nutrientCol" text="Nutrient Type" prefWidth="150"/>
+                    <TableColumn fx:id="numCol" text="Amount" prefWidth="120"/>
                 </columns>
             </TableView>
 
             <!-- Buttons -->
             <HBox spacing="10">
-                <Button id="addRowButton" text="Add Row" prefWidth="120"/>
-                <Button id="deleteRowButton" text="Delete Selected" prefWidth="150"/>
+                <Button fx:id="addRowButton" text="Add Row" prefWidth="120"/>
+                <Button fx:id="deleteRowButton" text="Delete Selected" prefWidth="150"/>
             </HBox>
 
         </VBox>
