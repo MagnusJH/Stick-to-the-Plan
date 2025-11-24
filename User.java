@@ -8,11 +8,9 @@ public class User {
     // fields
     private String username;
     private String password;
-    private int userID;
 
     /**
-     * Creates a new User object with a given usernmae and password.
-     * Automatically assigns a unique userID.
+     * Creates a new User object with a given username and password.
      *
      * @param username
      * @param password
@@ -37,17 +35,6 @@ public class User {
     }
 
     /**
-     * adds user
-     *
-     * @param username the username to set
-     * @param password the password to set
-     */
-    public void addUser (String username,String password) {
-        this.username = username;
-        this.password = password;
-    }
-
-    /**
      * sets the user's password
      *
      * @param password users password
@@ -66,14 +53,6 @@ public class User {
     }
 
     /**
-     *
-     * @param userID
-     */
-    public void setUserID(int userID) {
-        this.userID = userID;
-    }
-
-    /**
      * returns the user's password
      *
      * @return password
@@ -89,13 +68,5 @@ public class User {
      */
     public String getUsername () {
         return username;
-    }
-
-    /**
-     *
-     * @return
-     */
-    public int getUserID() {
-        return userID;
     }
 }
