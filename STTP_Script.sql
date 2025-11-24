@@ -85,28 +85,21 @@ COLLATE = utf8mb4_0900_ai_ci;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `sticktotheplan`.`calendar` (
   `userName` VARCHAR(20) NOT NULL,
-  `dateID` INT NOT NULL,
-  `day` INT NOT NULL,
-  `month` CHAR(3) NOT NULL,
-  `year` INT NOT NULL,
-  `foodTable` INT NOT NULL,
-  `weightTable` INT NOT NULL,
-  `cardioTable` INT NOT NULL,
-  PRIMARY KEY (`userName`, `dateID`),
-  INDEX `calendar_fk_food_idx` (`foodTable` ASC) VISIBLE,
-  INDEX `calendar_fk_weight_idx` (`weightTable` ASC) VISIBLE,
-  INDEX `calendar_fk_cardio_idx` (`cardioTable` ASC) VISIBLE,
+  `dateID` DATE NOT NULL,
+  `FWCTable` INT NOT NULL AUTO_INCREMENT,
+  PRIMARY KEY (`FWCTable`, `userName`, `dateID`),
+  INDEX `calendar_fk_user_idx` (`userName` ASC) VISIBLE,
   CONSTRAINT `calendar_fk_cardio`
-    FOREIGN KEY (`cardioTable`)
+    FOREIGN KEY (`FWCTable`)
     REFERENCES `sticktotheplan`.`cardio` (`cardioID`),
   CONSTRAINT `calendar_fk_food`
-    FOREIGN KEY (`foodTable`)
+    FOREIGN KEY (`FWCTable`)
     REFERENCES `sticktotheplan`.`food` (`foodID`),
   CONSTRAINT `calendar_fk_user`
     FOREIGN KEY (`userName`)
     REFERENCES `sticktotheplan`.`user` (`userName`),
-  CONSTRAINT `calendar_fk_weight`
-    FOREIGN KEY (`weightTable`)
+  CONSTRAINT `claendar_fk_weight`
+    FOREIGN KEY (`FWCTable`)
     REFERENCES `sticktotheplan`.`weights` (`weightID`))
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8mb4
