@@ -1,0 +1,36 @@
+.vbox_background_right{
+    -fx-background-image:url("aquaR.jpg")
+}
+.cursor_hand{
+    -fx-cursor:hand
+}
+.login_button1{
+    -fx-background-color:#2acbd4
+}
+.login_button2{
+    -fx-background-color: #222222
+}
+.login_button1:hover{
+    -fx-background-color:#FFAE42
+}
+.login_button2:hover{
+    -fx-background-color:#FFAE42
+}
+.signup_button{
+    -fx-background-color:#2acbd4
+}
+.signup_button:hover{
+    -fx-background-color:#FFAE42
+}
+.left-button-active {
+    -fx-background-color: #2acbd4;
+    -fx-text-fill: #222222;
+    -fx-background-radius: 50;
+}
+.left-button-inactive {
+    -fx-background-color: transparent;
+    -fx-text-fill: #2acbd4;
+    -fx-border-color: #FFAE42;
+    -fx-background-radius: 50;
+    -fx-border-radius: 50;
+}
