@@ -1,7 +1,9 @@
+package Login;
+
 import java.sql.*;
 
 /**
- * UserDAO class handles all database operations for the "User" table.
+ * UserDAO class handles all database operations for the "user" table.
  * It checks if a username exists, registers new users, and verifies logins.
  */
 public class UserDAO {
@@ -9,10 +11,8 @@ public class UserDAO {
     // Database connection URL
     private static final String URL = "jdbc:mysql://localhost:3306/sticktotheplan";
 
-    // MySQL username for connecting to the database.
+    // MySQL login credentials
     private static final String USER = "root";
-
-    // MySQL password for connecting to the database.
     private static final String PASSWORD = "password";
 
     /**
@@ -22,106 +22,88 @@ public class UserDAO {
      * @return true if username exists, false otherwise
      */
     public boolean isUsernameTaken(String username) {
-
-        // SQL query to count how many users have the given username
         String query = "SELECT COUNT(*) FROM user WHERE userName = ?";
 
-        // Use try-with to automatically close connections
         try (
-                Connection conn = DriverManager.getConnection(URL, USER, PASSWORD); // Connect to database
-                PreparedStatement stmt = conn.prepareStatement(query) // Create a prepared SQL statement
+                Connection conn = DriverManager.getConnection(URL, USER, PASSWORD);
+                PreparedStatement stmt = conn.prepareStatement(query)
         ) {
-            stmt.setString(1, username); // Replace '?' with the actual username
-            ResultSet rs = stmt.executeQuery(); // Execute query and get results
+            stmt.setString(1, username);
+
+            ResultSet rs = stmt.executeQuery();
 
             if (rs.next()) {
-                // If count > 0, the username already exists
-                return rs.getInt(1) > 0;
+                return rs.getInt(1) > 0; // username exists
             }
 
         } catch (SQLException e) {
-            // Print error message if something goes wrong
             e.printStackTrace();
         }
 
-        // If no result or error occurs, return false
-        return false;
+        return false; // default fallback
     }
 
     /**
-     * Registers a new user if the username is not already taken.
+     * Inserts a new user into the database if the username is not taken.
      *
-     * @param username desired username
-     * @param password user's password
-     * @return true if registration succeeds, false if
-     *         the username is taken or if an error occurs
+     * @param username new username
+     * @param password new password
+     * @return true if registration succeeds
      */
-    public int registerUser(String username, String password) {
+    public boolean registerUser(String username, String password) {
 
-        // First check if username already exists
+        // Check username first
         if (isUsernameTaken(username)) {
-            return -1; // Exit method early
+            return false;
         }
 
-        // SQL INSERT command to add a new user record
         String insert = "INSERT INTO user (userName, password) VALUES (?, ?)";
 
         try (
-                Connection conn = DriverManager.getConnection(URL, USER, PASSWORD); // Open connection
-                PreparedStatement stmt = conn.prepareStatement(insert, Statement.RETURN_GENERATED_KEYS)
+                Connection conn = DriverManager.getConnection(URL, USER, PASSWORD);
+                PreparedStatement stmt = conn.prepareStatement(insert)
         ) {
-            // Set each placeholder (?) with the correct value
             stmt.setString(1, username);
             stmt.setString(2, password);
 
-            // Execute the INSERT command
             stmt.executeUpdate();
             return true;
 
         } catch (SQLIntegrityConstraintViolationException e) {
-            // This happens if username is UNIQUE and already taken (extra safety)
+            // Username is UNIQUE and already exists
             return false;
+
         } catch (SQLException e) {
-            // Print full SQL error if connection or query fails
             e.printStackTrace();
         }
 
-        // Return -1 if registration failed
         return false;
     }
 
     /**
-     * Verifies login credentials by checking if username and password match.
+     * Verifies whether a username/password combination exists.
      *
-     * @param username the username entered by the user
-     * @param password the password entered by the user
-     * @return true if credentials are correct, false otherwise
+     * @return true if login is valid
      */
     public boolean verifyLogin(String username, String password) {
 
-        // SQL query to find a record that matches both username and password
         String query = "SELECT * FROM user WHERE userName = ? AND password = ?";
 
         try (
-                Connection conn = DriverManager.getConnection(URL, USER, PASSWORD); // Connect to database
+                Connection conn = DriverManager.getConnection(URL, USER, PASSWORD);
                 PreparedStatement stmt = conn.prepareStatement(query)
         ) {
-            // Replace the placeholders with user inputs
             stmt.setString(1, username);
             stmt.setString(2, password);
 
-            // Execute query
             ResultSet rs = stmt.executeQuery();
 
-            // If a record is found, login is successful
-            return rs.next();
+            return rs.next(); // login successful if any row matches
 
         } catch (SQLException e) {
-            // Print detailed error if something goes wrong
             e.printStackTrace();
         }
 
-        // Return false if login fails or error occurs
         return false;
     }
 }
