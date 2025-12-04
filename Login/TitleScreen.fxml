@@ -29,7 +29,7 @@
         stylesheets="@loginPage.css"
         xmlns="http://javafx.com/javafx/25"
         xmlns:fx="http://javafx.com/fxml/1"
-        fx:controller="TitleScreen.TitleScreenController">
+        fx:controller="Login.TitleScreenController">
 
 
     <!--RIGHT (LOGIN + SIGNUP FORM SECTION)-->
