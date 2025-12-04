@@ -1,3 +1,5 @@
+package Login;
+
 /**
  * User class - represents a user object with a username,
  * password, and unique userID. It provides methods to add user,
@@ -5,34 +7,55 @@
  */
 public class User {
 
-    // fields
     private String username;
     private String password;
 
     /**
      * Creates a new User object with a given username and password.
      *
-     * @param username
-     * @param password
+     * @param username the username to assign
+     * @param password the password to assign
      */
-    public User (int userID, String username,String password) {
-        this.userID = userID;
+    public User (String username,String password) {
         this.username = username;
         this.password = password;
     }
 
     /**
-     * Checks if user's username and password are valid.
-     * A valid user has a non-empty username and password.
+     * Determines if both username and password pass validation rules.
      *
-     * @return true if both username and password are not
-     * empty, false otherwise
+     * @return true if both username and password are valid
      */
     public boolean isValid() {
-        // will validate if username is taken with MySQL.
-        return username != null && !username.isEmpty()
-                && password != null && !password.isEmpty();
+        return isUsernameValid() && isPasswordValid();
     }
+
+    /**
+     * Validate the username.
+     * must not be null, must be at least 5 characters long, no spaces
+     *
+     * @return true if username meets all rules
+     */
+    private boolean isUsernameValid() {
+        return username != null
+                && username.length() >= 5
+                && !username.contains(" ");
+    }
+
+    /**
+     * Validates the password.
+     * must not be null, must be at least 6 characters long, must contain 1 number
+     * no spaces
+     *
+     * @return true if password meets all rules
+     */
+    private boolean isPasswordValid() {
+        return password != null
+                && password.length() >= 6
+                && password.matches(".*\\d.*")   // must contain a digit
+                && !password.contains(" ");
+    }
+
 
     /**
      * sets the user's password
