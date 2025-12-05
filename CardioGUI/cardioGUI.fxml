@@ -2,50 +2,43 @@
 
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
 
-<AnchorPane prefHeight="400.0" prefWidth="500.0"
-            xmlns="http://javafx.com/javafx/17.0.12"
-            xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="com.example.calendar.CardioController">
+<AnchorPane xmlns:fx="http://javafx.com/fxml"
+            fx:controller="CardioGUI.CardioController"
+            prefWidth="650" prefHeight="420">
 
     <children>
 
-        <Label alignment="CENTER" prefHeight="65.0" prefWidth="602.0"
-               text="Cardio Tracker" textAlignment="CENTER"
-               AnchorPane.topAnchor="10.0">
-            <font>
-                <Font name="Javanese Text" size="34.0"/>
-            </font>
-        </Label>
+        <VBox spacing="15" AnchorPane.topAnchor="20"
+              AnchorPane.leftAnchor="20" AnchorPane.rightAnchor="20"
+              AnchorPane.bottomAnchor="20">
 
-        <TableView fx:id="cardioTable"
-                   AnchorPane.topAnchor="80.0"
-                   AnchorPane.leftAnchor="20.0"
-                   AnchorPane.rightAnchor="20.0"
-                   AnchorPane.bottomAnchor="70.0"
-                   editable="true">
+            <!-- Title -->
+            <Label text= "Cardio Log"
+                   style="-fx-font-size: 20px; -fx-font-weight: bold;" />
 
-            <columns>
-                <TableColumn fx:id="nameCol"        text="Exercise" prefWidth="110"/>
-                <TableColumn fx:id="durationCol"    text="Duration" prefWidth="90"/>
-                <TableColumn fx:id="durTypeCol"     text="Units"    prefWidth="80"/>
-                <TableColumn fx:id="distanceCol"    text="Distance" prefWidth="90"/>
-                <TableColumn fx:id="distTypeCol"    text="Units"    prefWidth="80"/>
-                <TableColumn fx:id="caloriesCol"    text="Calories" prefWidth="100"/>
-            </columns>
+            <!-- Table -->
+            <TableView fx:id="tableView" editable="true" prefHeight="320">
+                <columns>
+                    <TableColumn fx:id="nameCol" text="Run Name" prefWidth="180"/>
+                    <TableColumn fx:id="durationCol" text="Calories" prefWidth="100"/>
+                    <TableColumn fx:id="durTypeCol" text="Protein" prefWidth="150"/>
+                    <TableColumn fx:id="distanceCol" text="Food Name" prefWidth="180"/>
+                    <TableColumn fx:id="distTypeCol" text="Calories" prefWidth="100"/>
+                    <TableColumn fx:id="caloriesCol" text="Protein" prefWidth="150"/>
+                </columns>
+            </TableView>
 
-        </TableView>
+            <!-- Buttons -->
+            <HBox spacing="10">
+                <Button fx:id="addRowButton" text="Add Row" prefWidth="120"/>
+                <Button fx:id="deleteRowButton" text="Delete Selected" prefWidth="150"/>
+                <Button fx:id="weightViewButton" text="Go to Weight Page" prefWidth="150"/>
+                <Button fx:id="foodViewButton" text="Go to Food Page" prefWidth="150"/>
+            </HBox>
 
-        <Button fx:id="addCardioRow" text="Add Row"
-                AnchorPane.bottomAnchor="20.0"
-                AnchorPane.leftAnchor="50.0"
-                prefWidth="100"/>
-
-        <Button fx:id="deleteCardioRow" text="Delete Row"
-                AnchorPane.bottomAnchor="20.0"
-                AnchorPane.leftAnchor="170.0"
-                prefWidth="120"/>
+        </VBox>
 
     </children>
+
 </AnchorPane>
