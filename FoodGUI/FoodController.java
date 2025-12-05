@@ -1,26 +1,29 @@
-package com.example.test;
+package FoodGUI;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
+import javafx.stage.Stage;
 import javafx.util.converter.IntegerStringConverter;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import functionality.FoodEntry;
 
 public class FoodController {
 
-    @FXML private TableView<FoodEntry> tableView;
+    @FXML private TableView<FoodGUI.FoodEntry> tableView;
+    @FXML private TableColumn<FoodGUI.FoodEntry, String> fName;
+    @FXML private TableColumn<FoodGUI.FoodEntry, Integer> cals;
+    @FXML private TableColumn<FoodGUI.FoodEntry, Integer> nutrNum;
 
-    @FXML private TableColumn<FoodEntry, String> foodCol;
-    @FXML private TableColumn<FoodEntry, Integer> calCol;
-    @FXML private TableColumn<FoodEntry, String> nutrientCol;
-    @FXML private TableColumn<FoodEntry, Integer> numCol;
 
     @FXML private Button addRowButton;
     @FXML private Button deleteRowButton;
+    @FXML private Button weightViewButton;
+    @FXML private Button cardioViewButton;
 
     private ObservableList<FoodEntry> data;
+    MainFolder.SceneLoader loader = new MainFolder.SceneLoader();
 
     @FXML
     public void initialize() {
@@ -31,35 +34,53 @@ public class FoodController {
 
         tableView.setEditable(true);
 
+        // Bind values
+        fName.setCellValueFactory(new PropertyValueFactory<>("fName"));
+        cals.setCellValueFactory(data -> data.getValue().calsProperty().asObject());
+        nutrNum.setCellValueFactory(data -> data.getValue().nutrNumProperty().asObject());
         // --- Cell Factories (for editing)
-        foodCol.setCellFactory(TextFieldTableCell.forTableColumn());
-        nutrientCol.setCellFactory(TextFieldTableCell.forTableColumn());
+        fName.setCellFactory(TextFieldTableCell.forTableColumn());
+        cals.setCellFactory(TextFieldTableCell.forTableColumn(new IntegerStringConverter()));
 
-        calCol.setCellFactory(TextFieldTableCell.forTableColumn(new IntegerStringConverter()));
-        numCol.setCellFactory(TextFieldTableCell.forTableColumn(new IntegerStringConverter()));
+        nutrNum.setCellFactory(TextFieldTableCell.forTableColumn(new IntegerStringConverter()));
 
         // --- Commit Handlers (save edits)
-        foodCol.setOnEditCommit(event ->
+        fName.setOnEditCommit(event ->
                 event.getRowValue().setFoodName(event.getNewValue()));
 
-        calCol.setOnEditCommit(event ->
+        cals.setOnEditCommit(event ->
                 event.getRowValue().setCals(event.getNewValue()));
 
-        nutrientCol.setOnEditCommit(event ->
-                event.getRowValue().setNutrName(event.getNewValue()));
-
-        numCol.setOnEditCommit(event ->
+        nutrNum.setOnEditCommit(event ->
                 event.getRowValue().setNutrNum(event.getNewValue()));
 
         // --- Add Row Button
         addRowButton.setOnAction(e -> {
-            data.add(new FoodEntry(0, "New Food", 0, 0, "Name"));
+            data.add(new FoodEntry(0, "New Food Entry", 0, 0));
         });
 
         // --- Delete Row Button
         deleteRowButton.setOnAction(e -> {
-            FoodEntry selected = tableView.getSelectionModel().getSelectedItem();
+            FoodGUI.FoodEntry selected = tableView.getSelectionModel().getSelectedItem();
             if (selected != null) data.remove(selected);
+        });
+
+        weightViewButton.setOnAction(e -> {
+            try {
+                loader.weightPage(new Stage());
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                System.out.println("Weight Page could not be loaded");
+            }
+        });
+
+        cardioViewButton.setOnAction(e -> {
+            try {
+                loader.cardioPage(new Stage());
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                System.out.println("Cardio Page could not be loaded");
+            }
         });
     }
 }
