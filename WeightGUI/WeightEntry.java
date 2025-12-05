@@ -27,6 +27,7 @@ public class WeightEntry {
     public void setWName(String value) {
         wName.set(value);
     }
+
     public StringProperty wNameProperty() {
         return wName;
     }
@@ -37,6 +38,7 @@ public class WeightEntry {
     public void setSets(int value) {
         sets.set(value);
     }
+
     public IntegerProperty setsProperty() {
         return sets;
     }
@@ -47,6 +49,7 @@ public class WeightEntry {
     public void setReps(int value) {
         reps.set(value);
     }
+
     public IntegerProperty repsProperty() {
         return reps;
     }
@@ -57,6 +60,7 @@ public class WeightEntry {
     public void setWeight(int value) {
         weight.set(value);
     }
+
     public IntegerProperty weightProperty() {
         return weight;
     }
