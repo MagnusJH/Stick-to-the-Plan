@@ -1,69 +1,92 @@
 package WeightGUI;
 
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
+import javafx.stage.Stage;
 import javafx.util.converter.IntegerStringConverter;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
-import java.net.URL;
-import java.util.ResourceBundle;
+public class WeightController {
 
-public class WeightController implements Initializable {
+    @FXML private TableView<WeightGUI.WeightEntry> tableView;
+    @FXML private TableColumn<WeightGUI.WeightEntry, String> wName;
+    @FXML private TableColumn<WeightGUI.WeightEntry, Integer> sets;
+    @FXML private TableColumn<WeightGUI.WeightEntry, Integer> reps;
+    @FXML private TableColumn<WeightGUI.WeightEntry, Integer> weight;
 
-    @FXML private TableView<WeightEntry> table;
-
-    @FXML private TableColumn<WeightEntry, String> exercise;
-    @FXML private TableColumn<WeightEntry, Integer> set;
-    @FXML private TableColumn<WeightEntry, Integer> rep;
-    @FXML private TableColumn<WeightEntry, Integer> weight;
 
     @FXML private Button addRowButton;
-    @FXML private Button deleteButton;
+    @FXML private Button deleteRowButton;
+    @FXML private Button foodViewButton;
+    @FXML private Button cardioViewButton;
 
-    @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {
+    private ObservableList<WeightEntry> data;
+    MainFolder.SceneLoader loader = new MainFolder.SceneLoader();
 
-        table.setEditable(true);
+    @FXML
+    public void initialize() {
 
-        // Bind columns to WeightEntry properties
-        exercise.setCellValueFactory(new PropertyValueFactory<>("wName"));
-        set.setCellValueFactory(cellData -> cellData.getValue().setsProperty().asObject());
-        rep.setCellValueFactory(cellData -> cellData.getValue().repsProperty().asObject());
-        weight.setCellValueFactory(cellData -> cellData.getValue().weightProperty().asObject());
+        // Create list
+        data = FXCollections.observableArrayList();
+        tableView.setItems(data);
 
-        // Editable columns
-        exercise.setCellFactory(TextFieldTableCell.forTableColumn());
-        exercise.setOnEditCommit(e ->
-                e.getRowValue().setWName(e.getNewValue())
-        );
+        tableView.setEditable(true);
 
-        set.setCellFactory(TextFieldTableCell.forTableColumn(new IntegerStringConverter()));
-        set.setOnEditCommit(e ->
-                e.getRowValue().setSets(e.getNewValue())
-        );
+        // Bind values
+        wName.setCellValueFactory(new PropertyValueFactory<>("wName"));
+        sets.setCellValueFactory(data -> data.getValue().setsProperty().asObject());
+        reps.setCellValueFactory(data -> data.getValue().repsProperty().asObject());
+        weight.setCellValueFactory(data -> data.getValue().weightProperty().asObject());
 
-        rep.setCellFactory(TextFieldTableCell.forTableColumn(new IntegerStringConverter()));
-        rep.setOnEditCommit(e ->
-                e.getRowValue().setReps(e.getNewValue())
-        );
+        // --- Cell Factories (for editing)
+        wName.setCellFactory(TextFieldTableCell.forTableColumn());
+        sets.setCellFactory(TextFieldTableCell.forTableColumn(new IntegerStringConverter()));
 
+        reps.setCellFactory(TextFieldTableCell.forTableColumn(new IntegerStringConverter()));
         weight.setCellFactory(TextFieldTableCell.forTableColumn(new IntegerStringConverter()));
-        weight.setOnEditCommit(e ->
-                e.getRowValue().setWeight(e.getNewValue())
-        );
 
-        // Add row button
-        addRowButton.setOnAction(event -> {
-            table.getItems().add(new WeightEntry(1,"Exercise", 1, 1, 0));
+        // --- Commit Handlers (save edits)
+        wName.setOnEditCommit(event ->
+                event.getRowValue().setWName(event.getNewValue()));
+
+        sets.setOnEditCommit(event ->
+                event.getRowValue().setSets(event.getNewValue()));
+
+        reps.setOnEditCommit(event ->
+                event.getRowValue().setReps(event.getNewValue()));
+
+        weight.setOnEditCommit(event ->
+                event.getRowValue().setWeight(event.getNewValue()));
+
+        // --- Add Row Button
+        addRowButton.setOnAction(e -> {
+            data.add(new WeightEntry(0, "New Exercise", 0, 0, 0));
         });
 
-        // Delete selected row button
-        deleteButton.setOnAction(event -> {
-            WeightEntry selected = table.getSelectionModel().getSelectedItem();
-            if (selected != null) {
-                table.getItems().remove(selected);
+        // --- Delete Row Button
+        deleteRowButton.setOnAction(e -> {
+            WeightGUI.WeightEntry selected = tableView.getSelectionModel().getSelectedItem();
+            if (selected != null) data.remove(selected);
+        });
+
+        foodViewButton.setOnAction(e -> {
+            try {
+                loader.foodPage(new Stage());
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                System.out.println("Food Page could not be loaded");
+            }
+        });
+
+        cardioViewButton.setOnAction(e -> {
+            try {
+                loader.cardioPage(new Stage());
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                System.out.println("Cardio Page could not be loaded");
             }
         });
     }
