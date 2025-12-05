@@ -4,7 +4,7 @@
 <?import javafx.scene.layout.*?>
 
 <AnchorPane xmlns:fx="http://javafx.com/fxml"
-            fx:controller="com.example.test.FoodController"
+            fx:controller="FoodGUI.FoodController"
             prefWidth="650" prefHeight="420">
 
     <children>
@@ -14,16 +14,15 @@
               AnchorPane.bottomAnchor="20">
 
             <!-- Title -->
-            <Label text="Food Log"
+            <Label text= "Food Log"
                    style="-fx-font-size: 20px; -fx-font-weight: bold;" />
 
             <!-- Table -->
             <TableView fx:id="tableView" editable="true" prefHeight="320">
                 <columns>
-                    <TableColumn fx:id="foodCol" text="Food" prefWidth="180"/>
-                    <TableColumn fx:id="calCol" text="Calories" prefWidth="100"/>
-                    <TableColumn fx:id="nutrientCol" text="Nutrient Type" prefWidth="150"/>
-                    <TableColumn fx:id="numCol" text="Amount" prefWidth="120"/>
+                    <TableColumn fx:id="fName" text="Food Name" prefWidth="180"/>
+                    <TableColumn fx:id="cals" text="Calories" prefWidth="100"/>
+                    <TableColumn fx:id="nutrNum" text="Protein" prefWidth="150"/>
                 </columns>
             </TableView>
 
@@ -31,6 +30,8 @@
             <HBox spacing="10">
                 <Button fx:id="addRowButton" text="Add Row" prefWidth="120"/>
                 <Button fx:id="deleteRowButton" text="Delete Selected" prefWidth="150"/>
+                <Button fx:id="weightViewButton" text="Go to Weight Page" prefWidth="150"/>
+                <Button fx:id="cardioViewButton" text="Go to Cardio Page" prefWidth="150"/>
             </HBox>
 
         </VBox>
