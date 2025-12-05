@@ -1,3 +1,4 @@
+package CardioGUI;
 
 import javafx.beans.property.*;
 
@@ -51,9 +52,4 @@ public class CardioEntry {
     public void setDistance(double v) { distance.set(v); }
     public void setDistType(String v) { distType.set(v); }
     public void setCaloriesBurned(int v) { caloriesBurned.set(v); }
-}
-
-
-
-
 }
