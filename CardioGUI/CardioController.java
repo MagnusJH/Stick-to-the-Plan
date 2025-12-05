@@ -1,3 +1,4 @@
+package CardioGUI;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -5,6 +6,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.TextFieldTableCell;
+import javafx.stage.Stage;
 import javafx.util.converter.DoubleStringConverter;
 import javafx.util.converter.IntegerStringConverter;
 
@@ -13,7 +15,7 @@ import java.util.ResourceBundle;
 
 public class CardioController implements Initializable {
 
-    @FXML private TableView<CardioEntry> cardioTable;
+    @FXML private TableView<CardioEntry> tableView;
 
     @FXML private TableColumn<CardioEntry, String> nameCol;
     @FXML private TableColumn<CardioEntry, Double> durationCol;
@@ -22,16 +24,19 @@ public class CardioController implements Initializable {
     @FXML private TableColumn<CardioEntry, String> distTypeCol;
     @FXML private TableColumn<CardioEntry, Integer> caloriesCol;
 
-    @FXML private Button addCardioRow;
-    @FXML private Button deleteCardioRow;
+    @FXML private Button addRowButton;
+    @FXML private Button deleteRowButton;
+    @FXML private Button foodViewButton;
+    @FXML private Button weightViewButton;
 
-    private final ObservableList<CardioEntry> entries = FXCollections.observableArrayList();
+    private ObservableList<CardioEntry> data;
+    MainFolder.SceneLoader loader = new MainFolder.SceneLoader();
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-
-        cardioTable.setEditable(true);
-        cardioTable.setItems(entries);
+        data = FXCollections.observableArrayList();
+        tableView.setEditable(true);
+        tableView.setItems(data);
 
         // Bind values
         nameCol.setCellValueFactory(data -> data.getValue().cNameProperty());
@@ -62,25 +67,33 @@ public class CardioController implements Initializable {
         caloriesCol.setOnEditCommit(e -> e.getRowValue().setCaloriesBurned(e.getNewValue()));
 
         // Button actions
-        addCardioRow.setOnAction(e -> addRow());
-        deleteCardioRow.setOnAction(e -> deleteRow());
+
+        addRowButton.setOnAction(e -> {
+            data.add(new CardioEntry(0, 0, "Run", 0.0, "mi", 0.0,"mi", 0));
+        });
+
+        // --- Delete Row Button
+        deleteRowButton.setOnAction(e -> {
+            CardioGUI.CardioEntry selected = tableView.getSelectionModel().getSelectedItem();
+            if (selected != null) data.remove(selected);
+        });
+        foodViewButton.setOnAction(e -> {
+            try {
+                loader.foodPage(new Stage());
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                System.out.println("Cardio Page could not be loaded");
+            }
+        });
+        weightViewButton.setOnAction(e -> {
+            try {
+                loader.weightPage(new Stage());
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                System.out.println("Cardio Page could not be loaded");
+            }
+        });
     }
 
-    private void addRow() {
-        int id = entries.size() + 1;
-        entries.add(new CardioEntry(
-                id, id,
-                "New Exercise",
-                0.0, "min",
-                0.0, "mi",
-                0
-        ));
-    }
 
-    private void deleteRow() {
-        CardioEntry selected = cardioTable.getSelectionModel().getSelectedItem();
-        if (selected != null) {
-            entries.remove(selected);
-        }
-    }
 }
