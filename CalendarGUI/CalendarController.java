@@ -1,3 +1,7 @@
+package CalendarGUI;
+
+import Connector.Connector;
+import FoodGUI.FoodEntry;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -9,17 +13,28 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
+import javafx.stage.Stage;
 
 import java.net.URL;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.time.ZonedDateTime;
 import java.util.*;
 
 public class CalendarController implements Initializable {
 
     private final List<CalendarActivity> allActivities = new ArrayList<>();
+    MainFolder.SceneLoader loader = new MainFolder.SceneLoader();
+
+    Connector c = new Connector();
+    Connection con = c.getConnection();
 
     ZonedDateTime dateFocus;
     ZonedDateTime today;
+
+    private String username;
 
     private int selectedDayForEvent;
 
@@ -33,6 +48,11 @@ public class CalendarController implements Initializable {
     @FXML private Text selectedDateLabel;
     @FXML private TextField eventNameField;
     @FXML private TextField eventTimeField;
+
+    // constructor
+    public CalendarController(String username) {
+        this.username = username;
+    }
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -67,6 +87,25 @@ public class CalendarController implements Initializable {
         double spacingV = calendar.getVgap();
 
         Map<Integer, List<CalendarActivity>> calendarActivityMap = getCalendarActivitiesMonth(dateFocus);
+
+// Add food entries into the calendar map
+        /*
+        for (int day = 1; day <= dateFocus.getMonth().maxLength(); day++) {
+
+            int fwcID = getCalendarEntry(dateFocus.getYear(), dateFocus.getMonthValue(), day);
+
+            if (fwcID != -1) {
+                List<CalendarActivity> foodActs = getFoodActivitiesForDate(fwcID);
+
+                if (!foodActs.isEmpty()) {
+                    calendarActivityMap
+                            .computeIfAbsent(day, d -> new ArrayList<>())
+                            .addAll(foodActs);
+                }
+            }
+        }*/
+
+
 
         int monthMaxDate = dateFocus.getMonth().maxLength();
         if(dateFocus.getYear() % 4 != 0 && monthMaxDate == 29){
@@ -113,7 +152,38 @@ public class CalendarController implements Initializable {
                         int finalCurrentDate = currentDate;
 
                         stackPane.setOnMouseClicked(mouseEvent -> {
-                            openPopupForDay(finalCurrentDate);
+
+                            // check for calendar entry
+                            int fwcID = getCalendarEntry(dateFocus.getYear(), dateFocus.getMonthValue(), currentDate);
+                            // add calendar entry if does not exist then get the id for that entry
+                            if (fwcID == -1) {
+                                addCalendarEntry(dateFocus.getYear(), dateFocus.getMonthValue(), currentDate);
+                                fwcID = getCalendarEntry(dateFocus.getYear(), dateFocus.getMonthValue(),  currentDate);
+                            }
+
+                            // hide calendar
+                            MainFolder.SceneLoader.getCalendarStage().close();
+
+                            // load weight page
+                            try {
+                                loader.weightPage(fwcID);
+                            } catch (Exception e) {
+                                throw new RuntimeException(e);
+                            }
+                            // load food page
+                            try {
+                                loader.foodPage(fwcID);
+                            } catch (Exception e) {
+                                throw new RuntimeException(e);
+                            }
+                            // load cardio page
+                            try {
+                                loader.cardioPage(fwcID);
+                            } catch (Exception e) {
+                                throw new RuntimeException(e);
+                            }
+
+                            loader.getWeightStage().show();
                         });
 
                         List<CalendarActivity> activities = calendarActivityMap.get(currentDate);
@@ -134,49 +204,36 @@ public class CalendarController implements Initializable {
         }
     }
 
-    // -------------------------
-    // NEW POPUP HANDLING
-    // -------------------------
-
-    private void openPopupForDay(int day) {
-        selectedDayForEvent = day;
-
-        selectedDateLabel.setText("Date: " + month.getText() + " " + day);
-        eventNameField.clear();
-        eventTimeField.clear();
-
-        addEventPane.setVisible(true);
-    }
-
-    @FXML
-    private void cancelAddEvent(ActionEvent event) {
-        addEventPane.setVisible(false);
-    }
-
-    @FXML
-    private void confirmAddEvent(ActionEvent e) {
+    private int getCalendarEntry(int year, int month, int day) {
+        String sql = "SELECT FWCTable FROM calendar WHERE dateID = ? AND userName = ?";
         try {
-            String[] parts = eventTimeField.getText().split(":");
-            int hour = Integer.parseInt(parts[0]);
-            int minute = Integer.parseInt(parts[1]);
+            PreparedStatement prepState = con.prepareStatement(sql);
+            prepState.setString(1, year + "-" + month + "-" + day);
+            prepState.setString(2, username);
 
-            ZonedDateTime eventDate = ZonedDateTime.of(
-                    dateFocus.getYear(),
-                    dateFocus.getMonthValue(),
-                    selectedDayForEvent,
-                    hour, minute, 0, 0,
-                    dateFocus.getZone()
-            );
+            ResultSet result = prepState.executeQuery();
 
-            allActivities.add(new CalendarActivity(eventDate, eventNameField.getText(), 0));
+            if (result.next()) {
+                return result.getInt("FWCTable");
+            } else {
+                return -1;
+            }
 
-            addEventPane.setVisible(false);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
-            calendar.getChildren().clear();
-            drawCalendar();
+    private void addCalendarEntry(int year, int month, int day) {
+        String insert = "INSERT INTO calendar (userName, dateID) VALUES (?, ?)";
 
+        try (PreparedStatement prepState = con.prepareStatement(insert)) {
+            prepState.setString(1, username);
+            prepState.setString(2, year + "-" + month + "-" + day);
+
+            prepState.executeUpdate();
         } catch (Exception ex) {
-            System.out.println("Invalid input");
+            ex.printStackTrace();
         }
     }
 
@@ -200,7 +257,7 @@ public class CalendarController implements Initializable {
 
             CalendarActivity activity = calendarActivities.get(k);
 
-            Text text = new Text(activity.getClientName() + ", " + activity.getDate().toLocalTime());
+            Text text = new Text(activity.getName() + ", " + activity.getDate().toLocalTime());
             activityBox.getChildren().add(text);
 
             text.setOnMouseClicked(e -> System.out.println(text.getText()));
@@ -237,5 +294,4 @@ public class CalendarController implements Initializable {
 
         return createCalendarMap(filtered);
     }
-
 }
