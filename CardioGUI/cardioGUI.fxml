@@ -4,7 +4,6 @@
 <?import javafx.scene.layout.*?>
 
 <AnchorPane xmlns:fx="http://javafx.com/fxml"
-            fx:controller="CardioGUI.CardioController"
             prefWidth="650" prefHeight="420">
 
     <children>
@@ -21,11 +20,11 @@
             <TableView fx:id="tableView" editable="true" prefHeight="320">
                 <columns>
                     <TableColumn fx:id="nameCol" text="Run Name" prefWidth="180"/>
-                    <TableColumn fx:id="durationCol" text="Calories" prefWidth="100"/>
-                    <TableColumn fx:id="durTypeCol" text="Protein" prefWidth="150"/>
-                    <TableColumn fx:id="distanceCol" text="Food Name" prefWidth="180"/>
-                    <TableColumn fx:id="distTypeCol" text="Calories" prefWidth="100"/>
-                    <TableColumn fx:id="caloriesCol" text="Protein" prefWidth="150"/>
+                    <TableColumn fx:id="durationCol" text="Duration Amount" prefWidth="100"/>
+                    <TableColumn fx:id="durTypeCol" text="Duration Type" prefWidth="150"/>
+                    <TableColumn fx:id="distanceCol" text="Distance Amount" prefWidth="180"/>
+                    <TableColumn fx:id="distTypeCol" text="Distance Type" prefWidth="100"/>
+                    <TableColumn fx:id="caloriesCol" text="Calories Burned" prefWidth="150"/>
                 </columns>
             </TableView>
 
@@ -35,6 +34,8 @@
                 <Button fx:id="deleteRowButton" text="Delete Selected" prefWidth="150"/>
                 <Button fx:id="weightViewButton" text="Go to Weight Page" prefWidth="150"/>
                 <Button fx:id="foodViewButton" text="Go to Food Page" prefWidth="150"/>
+                <Button fx:id="calendarViewButton" text="Go to Calendar Page" prefWidth="150"/>
+
             </HBox>
 
         </VBox>
