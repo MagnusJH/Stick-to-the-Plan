@@ -4,7 +4,6 @@
 <?import javafx.scene.layout.*?>
 
 <AnchorPane xmlns:fx="http://javafx.com/fxml"
-            fx:controller="FoodGUI.FoodController"
             prefWidth="650" prefHeight="420">
 
     <children>
@@ -32,6 +31,7 @@
                 <Button fx:id="deleteRowButton" text="Delete Selected" prefWidth="150"/>
                 <Button fx:id="weightViewButton" text="Go to Weight Page" prefWidth="150"/>
                 <Button fx:id="cardioViewButton" text="Go to Cardio Page" prefWidth="150"/>
+                <Button fx:id="calendarViewButton" text="Go to Calendar Page" prefWidth="150"/>
             </HBox>
 
         </VBox>
