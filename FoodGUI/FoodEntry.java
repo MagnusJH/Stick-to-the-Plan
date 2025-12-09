@@ -23,11 +23,11 @@ public class FoodEntry {
         return foodName.get();
     }
 
-    public void setFoodName(String f) {
-        foodName.set(f);
+    public void setFoodName(String foodName) {
+        this.foodName.set(foodName);
     }
 
-    public StringProperty fNameProperty() {
+    public StringProperty foodNameProperty() {
         return foodName;
     }
 
@@ -35,24 +35,34 @@ public class FoodEntry {
         return cals.get();
     }
 
-    public void setCals(int c) {
-        cals.set(c);
+    public void setCals(int cals) {
+        this.cals.set(cals);
     }
 
     public IntegerProperty calsProperty() {
         return cals;
     }
 
-    public int getNutrNum() { return nutrNum.get();
+    public int getNutrNum() {
+        return nutrNum.get();
     }
 
-    public void setNutrNum(int n) {
-        nutrNum.set(n);
+    public void setNutrNum(int nutrNum) {
+        this.nutrNum.set(nutrNum);
     }
 
-    public IntegerProperty  nutrNumProperty() {
+    public IntegerProperty nutrNumProperty() {
         return nutrNum;
     }
 
+    @Override
+    public String toString() {
+        return "FoodEntry{" +
+                "rowID=" + rowID +
+                ", foodName=" + foodName.get() +
+                ", cals=" + cals.get() +
+                ", nutrNum=" + nutrNum.get() +
+                '}';
+    }
 }
 
