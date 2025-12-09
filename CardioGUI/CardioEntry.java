@@ -5,7 +5,6 @@ import javafx.beans.property.*;
 public class CardioEntry {
 
     private final IntegerProperty rowID = new SimpleIntegerProperty();
-    private final IntegerProperty cardioID = new SimpleIntegerProperty();
     private final StringProperty cName = new SimpleStringProperty();
     private final DoubleProperty duration = new SimpleDoubleProperty();
     private final StringProperty durType = new SimpleStringProperty();
@@ -13,11 +12,10 @@ public class CardioEntry {
     private final StringProperty distType = new SimpleStringProperty();
     private final IntegerProperty caloriesBurned = new SimpleIntegerProperty();
 
-    public CardioEntry(int cardioID, int rowID, String cName,
+    public CardioEntry(int rowID, String cName,
                        double duration, String durType,
                        double distance, String distType, int caloriesBurned) {
 
-        this.cardioID.set(cardioID);
         this.rowID.set(rowID);
         this.cName.set(cName);
         this.duration.set(duration);
@@ -36,7 +34,6 @@ public class CardioEntry {
     public IntegerProperty caloriesBurnedProperty() { return caloriesBurned; }
 
     public int getRowID() { return rowID.get(); }
-    public int getCardioID() { return cardioID.get(); }
     public String getCName() { return cName.get(); }
     public double getDuration() { return duration.get(); }
     public String getDurType() { return durType.get(); }
