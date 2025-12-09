@@ -1,3 +1,5 @@
+package CalendarGUI;
+
 import java.time.ZonedDateTime;
 
 public class CalendarActivity {
@@ -23,7 +25,7 @@ public class CalendarActivity {
         return Name;
     }
 
-    public void setClientName(String Name) {
+    public void setName(String Name) {
         this.Name = Name;
     }
 
