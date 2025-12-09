@@ -10,7 +10,7 @@
 
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.control.TextField?>
-<AnchorPane prefHeight="642.0" prefWidth="744.0" style="-fx-background-color: #f2fafc;" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="CalendarGUI.CalendarController">
+<AnchorPane prefHeight="642.0" prefWidth="744.0" style="-fx-background-color: #f2fafc;" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1">
     <FlowPane fx:id="calendar" hgap="10.0" layoutX="14.0" layoutY="116.0" prefHeight="498.0" prefWidth="716.0" vgap="5.0" />
     <HBox alignment="CENTER" layoutX="163.0" layoutY="14.0" prefHeight="44.0" prefWidth="419.0" spacing="5.0">
         <children>
@@ -42,43 +42,5 @@
             <Insets right="9.0" />
         </padding>
     </HBox>
-    <!-- Event Creation Popup -->
-    <AnchorPane fx:id="addEventPane"
-                visible="false"
-                style="-fx-background-color: rgba(0,0,0,0.4);"
-                prefHeight="642" prefWidth="744"
-                AnchorPane.topAnchor="0" AnchorPane.bottomAnchor="0"
-                AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0">
-
-        <VBox layoutX="200" layoutY="150"
-              spacing="15"
-              style="-fx-background-color: white; -fx-padding: 20; -fx-background-radius: 10; -fx-effect: dropshadow(gaussian, black, 20, 0, 0, 0);"
-              prefWidth="300">
-
-            <Text text="Add Event">
-                <font>
-                    <Font size="20" />
-                </font>
-            </Text>
-
-            <Text fx:id="selectedDateLabel" text="Date: " />
-
-            <HBox spacing="10">
-                <Text text="Name:" />
-                <TextField fx:id="eventNameField" prefWidth="180"/>
-            </HBox>
-
-            <HBox spacing="10">
-                <Text text="Time:" />
-                <TextField fx:id="eventTimeField" promptText="HH:mm" prefWidth="100"/>
-            </HBox>
-
-            <HBox spacing="15">
-                <Button text="Add" onAction="#confirmAddEvent" prefWidth="100"/>
-                <Button text="Cancel" onAction="#cancelAddEvent" prefWidth="100"/>
-            </HBox>
-
-        </VBox>
-    </AnchorPane>
 
 </AnchorPane>
