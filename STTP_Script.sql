@@ -18,6 +18,36 @@ CREATE SCHEMA IF NOT EXISTS `sticktotheplan` DEFAULT CHARACTER SET utf8mb4 COLLA
 USE `sticktotheplan` ;
 
 -- -----------------------------------------------------
+-- Table `sticktotheplan`.`user`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `sticktotheplan`.`user` (
+  `userName` VARCHAR(20) NOT NULL,
+  `password` VARCHAR(20) NOT NULL,
+  PRIMARY KEY (`userName`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb4
+COLLATE = utf8mb4_0900_ai_ci;
+
+
+-- -----------------------------------------------------
+-- Table `sticktotheplan`.`calendar`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `sticktotheplan`.`calendar` (
+  `userName` VARCHAR(20) NOT NULL,
+  `dateID` DATE NOT NULL,
+  `FWCTable` INT NOT NULL AUTO_INCREMENT,
+  PRIMARY KEY (`FWCTable`, `userName`, `dateID`),
+  INDEX `calendar_fk_user_idx` (`userName` ASC) VISIBLE,
+  CONSTRAINT `calendar_fk_user`
+    FOREIGN KEY (`userName`)
+    REFERENCES `sticktotheplan`.`user` (`userName`))
+ENGINE = InnoDB
+AUTO_INCREMENT = 3
+DEFAULT CHARACTER SET = utf8mb4
+COLLATE = utf8mb4_0900_ai_ci;
+
+
+-- -----------------------------------------------------
 -- Table `sticktotheplan`.`cardio`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `sticktotheplan`.`cardio` (
@@ -29,7 +59,10 @@ CREATE TABLE IF NOT EXISTS `sticktotheplan`.`cardio` (
   `distance` INT NULL DEFAULT NULL,
   `distType` VARCHAR(2) NULL DEFAULT NULL,
   `caloriesBurned` INT NULL DEFAULT NULL,
-  PRIMARY KEY (`cardioID`, `rowID`))
+  PRIMARY KEY (`cardioID`, `rowID`),
+  CONSTRAINT `cardio_fk_calendar`
+    FOREIGN KEY (`cardioID`)
+    REFERENCES `sticktotheplan`.`calendar` (`FWCTable`))
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_0900_ai_ci;
@@ -46,19 +79,10 @@ CREATE TABLE IF NOT EXISTS `sticktotheplan`.`food` (
   `nutrName` VARCHAR(45) NULL DEFAULT NULL,
   `nutrAmount` INT NULL DEFAULT NULL,
   PRIMARY KEY (`foodID`, `rowID`),
-  INDEX `food_fk_calendar_idx` (`rowID` ASC) VISIBLE)
-ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8mb4
-COLLATE = utf8mb4_0900_ai_ci;
-
-
--- -----------------------------------------------------
--- Table `sticktotheplan`.`user`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `sticktotheplan`.`user` (
-  `userName` VARCHAR(20) NOT NULL,
-  `password` VARCHAR(20) NOT NULL,
-  PRIMARY KEY (`userName`))
+  INDEX `food_fk_calendar_idx` (`rowID` ASC) VISIBLE,
+  CONSTRAINT `food_fk_calendar`
+    FOREIGN KEY (`foodID`)
+    REFERENCES `sticktotheplan`.`calendar` (`FWCTable`))
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_0900_ai_ci;
@@ -74,33 +98,10 @@ CREATE TABLE IF NOT EXISTS `sticktotheplan`.`weights` (
   `reps` INT NULL DEFAULT NULL,
   `weight` INT NULL DEFAULT NULL,
   `wName` VARCHAR(45) NOT NULL,
-  PRIMARY KEY (`weightID`, `rowID`))
-ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8mb4
-COLLATE = utf8mb4_0900_ai_ci;
-
-
--- -----------------------------------------------------
--- Table `sticktotheplan`.`calendar`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `sticktotheplan`.`calendar` (
-  `userName` VARCHAR(20) NOT NULL,
-  `dateID` DATE NOT NULL,
-  `FWCTable` INT NOT NULL AUTO_INCREMENT,
-  PRIMARY KEY (`FWCTable`, `userName`, `dateID`),
-  INDEX `calendar_fk_user_idx` (`userName` ASC) VISIBLE,
-  CONSTRAINT `calendar_fk_cardio`
-    FOREIGN KEY (`FWCTable`)
-    REFERENCES `sticktotheplan`.`cardio` (`cardioID`),
-  CONSTRAINT `calendar_fk_food`
-    FOREIGN KEY (`FWCTable`)
-    REFERENCES `sticktotheplan`.`food` (`foodID`),
-  CONSTRAINT `calendar_fk_user`
-    FOREIGN KEY (`userName`)
-    REFERENCES `sticktotheplan`.`user` (`userName`),
-  CONSTRAINT `claendar_fk_weight`
-    FOREIGN KEY (`FWCTable`)
-    REFERENCES `sticktotheplan`.`weights` (`weightID`))
+  PRIMARY KEY (`weightID`, `rowID`),
+  CONSTRAINT `weights_fk_calendar`
+    FOREIGN KEY (`weightID`)
+    REFERENCES `sticktotheplan`.`calendar` (`FWCTable`))
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_0900_ai_ci;
